@@ -9,7 +9,7 @@ class Youtube
      * @var string
      */
     protected $youtube_key; // from the config file
-
+    protected $referrer; // from the config file
     /**
      * @var array
      */
@@ -41,17 +41,15 @@ class Youtube
      * @param string $key
      * @throws \Exception
      */
-    public function __construct($key, $config = [])
+    public function __construct($key, $referrer, $config = [])
     {
         if (is_string($key) && !empty($key)) {
             $this->youtube_key = $key;
         } else {
             throw new \Exception('Google API key is Required, please visit https://console.developers.google.com/');
         }
+        $this->referrer = $referrer;
         $this->config['use-http-host'] = isset($config['use-http-host']) ? $config['use-http-host'] : false;
-        if (isset($config['referrer'])) {
-            $this->config['referrer'] = $config['referrer'];
-        }
     }
 
     /**
@@ -740,8 +738,8 @@ class Youtube
         //boilerplates for CURL
         $tuCurl = curl_init();
         
-        if ($this->config['referrer']) {
-            curl_setopt($tuCurl, CURLOPT_HEADER, array('Referer' => $this->config['referrer']));
+        if (isset($_SERVER['HTTP_HOST']) && $this->config['use-http-host']) {
+            curl_setopt($tuCurl, CURLOPT_HEADER, array('Referer' => $_SERVER['HTTP_HOST']));
         }
         
         curl_setopt($tuCurl, CURLOPT_URL, $url . (strpos($url, '?') === false ? '?' : '') . http_build_query($params));
@@ -749,6 +747,10 @@ class Youtube
             curl_setopt($tuCurl, CURLOPT_PORT, 80);
         } else {
             curl_setopt($tuCurl, CURLOPT_PORT, 443);
+        }
+
+        if ($this->referrer) {
+            curl_setopt($tuCurl, CURLOPT_REFERER, $this->referrer);
         }
 
         curl_setopt($tuCurl, CURLOPT_RETURNTRANSFER, 1);

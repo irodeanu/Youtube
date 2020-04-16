@@ -10,5 +10,6 @@
 */
 
 return [
-    'key' => env('YOUTUBE_API_KEY', 'YOUR_API_KEY')
+    'key' => env('YOUTUBE_API_KEY', 'YOUR_API_KEY'),
+    'referrer' => env('YOUTUBE_REFERRER', 'YOUR_REFERRER')
 ];
