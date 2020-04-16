@@ -49,6 +49,9 @@ class Youtube
             throw new \Exception('Google API key is Required, please visit https://console.developers.google.com/');
         }
         $this->config['use-http-host'] = isset($config['use-http-host']) ? $config['use-http-host'] : false;
+        if (isset($config['referrer'])) {
+            $this->config['referrer'] = $config['referrer'];
+        }
     }
 
     /**
@@ -737,8 +740,8 @@ class Youtube
         //boilerplates for CURL
         $tuCurl = curl_init();
         
-        if (isset($_SERVER['HTTP_HOST']) && $this->config['use-http-host']) {
-            curl_setopt($tuCurl, CURLOPT_HEADER, array('Referer' => $_SERVER['HTTP_HOST']));
+        if ($this->config['referrer']) {
+            curl_setopt($tuCurl, CURLOPT_HEADER, array('Referer' => $this->config['referrer']]));
         }
         
         curl_setopt($tuCurl, CURLOPT_URL, $url . (strpos($url, '?') === false ? '?' : '') . http_build_query($params));
