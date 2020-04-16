@@ -741,7 +741,7 @@ class Youtube
         $tuCurl = curl_init();
         
         if ($this->config['referrer']) {
-            curl_setopt($tuCurl, CURLOPT_HEADER, array('Referer' => $this->config['referrer']]));
+            curl_setopt($tuCurl, CURLOPT_HEADER, array('Referer' => $this->config['referrer']));
         }
         
         curl_setopt($tuCurl, CURLOPT_URL, $url . (strpos($url, '?') === false ? '?' : '') . http_build_query($params));
