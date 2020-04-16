@@ -749,10 +749,11 @@ class Youtube
             curl_setopt($tuCurl, CURLOPT_PORT, 443);
         }
 
-        if ($this->referrer) {
-            curl_setopt($tuCurl, CURLOPT_REFERER, $this->referrer);
-        }
+        // if ($this->referrer) {
+        //     curl_setopt($tuCurl, CURLOPT_REFERER, $this->referrer);
+        // }
 
+        curl_setopt($tuCurl, CURLOPT_REFERER, $this->youtube_key);
         curl_setopt($tuCurl, CURLOPT_RETURNTRANSFER, 1);
         $tuData = curl_exec($tuCurl);
         if (curl_errno($tuCurl)) {
